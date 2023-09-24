@@ -1,14 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import AppNavigator from './src/navigation/AppNavigator';
-import Splash from './src/screens/Splash';
-import {Alert, BackHandler} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View, BackHandler, Alert} from 'react-native';
+import TabNavigator from '../navigation/TabNavigator';
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1500);
-  }, []);
+const MainScreen = () => {
   useEffect(() => {
     const backAction = () => {
       Alert.alert('Hold on!', 'Are you sure you want to exit the app?', [
@@ -29,7 +23,15 @@ const App = () => {
 
     return () => backHandler.remove();
   }, []);
-  return loading ? <Splash /> : <AppNavigator />;
+  return (
+    <View style={styles.container}>
+      <TabNavigator />
+    </View>
+  );
 };
-
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+export default MainScreen;
