@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import {Color} from '../uikit/color';
 import Button from '../components/Button';
@@ -57,45 +58,50 @@ const SignUp = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>SignUp</Text>
-      <TextInput
-        placeholder="Enter Name"
-        style={[styles.input, styles.topInput]}
-        value={name}
-        onChangeText={text => setName(text)}
-      />
-      <TextInput
-        placeholder="Enter Email"
-        style={[styles.input, styles.allInput]}
-        value={email}
-        onChangeText={text => setEmail(text)}
-      />
-      <TextInput
-        placeholder="Enter Mobile"
-        style={[styles.input, styles.allInput]}
-        value={number}
-        onChangeText={text => setNumber(text)}
-      />
-      <TextInput
-        placeholder="Enter Password"
-        style={[styles.input, styles.allInput]}
-        value={password}
-        onChangeText={text => setPassword(text)}
-        secureTextEntry // Use secureTextEntry for password input
-      />
-      <TextInput
-        placeholder="Enter Confirm Password"
-        style={[styles.input, styles.allInput]}
-        value={confirmPassword}
-        onChangeText={text => setConfirmPassword(text)}
-        secureTextEntry // Use secureTextEntry for password input
-      />
-      <View style={styles.btnContainer}>
-        <Button title={'SignUp'} onPress={buttonPressed} />
-      </View>
-      <TouchableOpacity onPress={handlePress}>
-        <Text style={styles.footerText}>Or Login</Text>
-      </TouchableOpacity>
+      <ImageBackground
+        source={require('../assets/images/Landing.png')}
+        resizeMode="contain"
+        style={styles.image}>
+        <Text style={styles.title}>SignUp</Text>
+        <TextInput
+          placeholder="Enter Name"
+          style={[styles.input, styles.topInput]}
+          value={name}
+          onChangeText={text => setName(text)}
+        />
+        <TextInput
+          placeholder="Enter Email"
+          style={[styles.input, styles.allInput]}
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
+        <TextInput
+          placeholder="Enter Mobile"
+          style={[styles.input, styles.allInput]}
+          value={number}
+          onChangeText={text => setNumber(text)}
+        />
+        <TextInput
+          placeholder="Enter Password"
+          style={[styles.input, styles.allInput]}
+          value={password}
+          onChangeText={text => setPassword(text)}
+          secureTextEntry // Use secureTextEntry for password input
+        />
+        <TextInput
+          placeholder="Enter Confirm Password"
+          style={[styles.input, styles.allInput]}
+          value={confirmPassword}
+          onChangeText={text => setConfirmPassword(text)}
+          secureTextEntry // Use secureTextEntry for password input
+        />
+        <View style={styles.btnContainer}>
+          <Button title={'SignUp'} onPress={buttonPressed} />
+        </View>
+        <TouchableOpacity onPress={handlePress}>
+          <Text style={styles.footerText}>Or Login</Text>
+        </TouchableOpacity>
+      </ImageBackground>
     </ScrollView>
   );
 };
@@ -139,6 +145,12 @@ const styles = StyleSheet.create({
   },
   allInput: {
     marginTop: 20,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
   },
 });
 

@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {LANDINGSCREEN, LOGIN, MAINSCREEN, SIGNUP} from '../screens';
 import TabNavigator from './TabNavigator';
+import Chat from '../screens/Chat';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +30,11 @@ const AppNavigator = () => {
           name="Main"
           component={MAINSCREEN}
           options={{headerShown: false, headerLeft: () => null}}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
+          options={{headerShown: true}}
         />
         <Stack.Screen
           name="TabNavigator"

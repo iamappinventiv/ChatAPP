@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,
+    flexDirection: 'row',
   },
 });
 export default Settings;

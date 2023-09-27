@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import {Color} from '../uikit/color';
 import Button from '../components/Button';
@@ -33,7 +34,6 @@ const Login = () => {
       .then(res => {
         setVisible(false);
         if (res.docs) {
-          console.log(JSON.stringify(res.docs[0].data()));
           goToNext(
             res.docs[0].data().name,
             res.docs[0].data().email,
@@ -58,28 +58,33 @@ const Login = () => {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}>Login </Text>
+        <ImageBackground
+          source={require('../assets/images/Landing.png')}
+          resizeMode="contain"
+          style={styles.image}>
+          <Text style={styles.title}>Login </Text>
 
-        <TextInput
-          placeholder="Enter Email"
-          style={[styles.input, styles.allInput]}
-          value={email}
-          onChangeText={text => setEmail(text)}
-        />
+          <TextInput
+            placeholder="Enter Email"
+            style={[styles.input, styles.allInput]}
+            value={email}
+            onChangeText={text => setEmail(text)}
+          />
 
-        <TextInput
-          placeholder="Enter Password"
-          style={[styles.input, styles.allInput]}
-          value={password}
-          onChangeText={text => setPassword(text)}
-        />
+          <TextInput
+            placeholder="Enter Password"
+            style={[styles.input, styles.allInput]}
+            value={password}
+            onChangeText={text => setPassword(text)}
+          />
 
-        <View style={styles.btnContainer}>
-          <Button title={'Login'} onPress={buttonPressed} />
-        </View>
-        <TouchableOpacity onPress={handlePress}>
-          <Text style={styles.footerText}>Or SignUp</Text>
-        </TouchableOpacity>
+          <View style={styles.btnContainer}>
+            <Button title={'Login'} onPress={buttonPressed} />
+          </View>
+          <TouchableOpacity onPress={handlePress}>
+            <Text style={styles.footerText}>Or SignUp</Text>
+          </TouchableOpacity>
+        </ImageBackground>
       </View>
       <Loader visible={visible} />
     </>
@@ -98,6 +103,12 @@ const styles = StyleSheet.create({
     marginTop: 100,
     fontFamily: 'Poppins-Bold',
   },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    height: '100%',
+    width: '100%',
+  },
   input: {
     alignSelf: 'center',
     backgroundColor: Color.white,
@@ -105,7 +116,6 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 0.5,
     borderRadius: 10,
-
     paddingLeft: 10,
   },
   btnContainer: {
