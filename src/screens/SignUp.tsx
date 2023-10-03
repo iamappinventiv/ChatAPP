@@ -20,7 +20,7 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState(''); // Fix the typo here
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const navigation = useNavigation<any>();
 
@@ -93,7 +93,7 @@ const SignUp = () => {
           style={[styles.input, styles.allInput]}
           value={confirmPassword}
           onChangeText={text => setConfirmPassword(text)}
-          secureTextEntry // Use secureTextEntry for password input
+          secureTextEntry
         />
         <View style={styles.btnContainer}>
           <Button title={'SignUp'} onPress={buttonPressed} />

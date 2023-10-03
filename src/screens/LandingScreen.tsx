@@ -1,24 +1,12 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Color} from '../uikit/color';
 import {useNavigation} from '@react-navigation/native';
 import Button from '../components/Button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LandingScreen = () => {
   const navigation = useNavigation<any>();
 
-  const checkLogin = async () => {
-    const id = await AsyncStorage.getItem('USERID');
-    if (id !== null) {
-      navigation.navigate('Main');
-    } else {
-      navigation.navigate('LandingScreen');
-    }
-  };
-  useEffect(() => {
-    checkLogin();
-  });
   const handlePress = () => {
     navigation.navigate('Login');
   };

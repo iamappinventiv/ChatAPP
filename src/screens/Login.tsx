@@ -14,82 +14,85 @@ import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
 import Loader from '../components/Loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const navigation = useNavigation<any>();
+
   const handlePress = () => {
     navigation.navigate('SignUp');
   };
+
   const buttonPressed = async () => {
     loginUser();
   };
+
+  const goToNext = async (name: string, email: string, userId: string) => {
+    await AsyncStorage.setItem('NAME', name);
+    await AsyncStorage.setItem('EMAIL', email);
+    await AsyncStorage.setItem('USERID', userId);
+    navigation.navigate('Main');
+  };
+
   const loginUser = () => {
     setVisible(true);
     firestore()
       .collection('users')
       .where('email', '==', email)
       .get()
-      .then(res => {
+      .then(querySnapshot => {
         setVisible(false);
-        if (res.docs) {
-          goToNext(
-            res.docs[0].data().name,
-            res.docs[0].data().email,
-            res.docs[0].data().userId,
-          );
+        if (!querySnapshot.empty) {
+          const doc = querySnapshot.docs[0];
+          const userData = doc.data();
+          goToNext(userData.name, userData.email, userData.userId);
         } else {
-          Alert.alert('User Not Found');
+          Alert.alert('User Not Found', 'Please Create Account');
         }
       })
       .catch(error => {
         setVisible(false);
-        console.log(error);
-        Alert.alert('User Not Found', 'Please Create Account');
+        console.error(error);
+        Alert.alert('Error', 'An error occurred while logging in.');
       });
-    const goToNext = async (name: string, email: string, userId: string) => {
-      await AsyncStorage.setItem('NAME', name);
-      await AsyncStorage.setItem('EMAIL', email);
-      await AsyncStorage.setItem('USERID', userId);
-      navigation.navigate('Main');
-    };
   };
+
   return (
-    <>
-      <View style={styles.container}>
-        <ImageBackground
-          source={require('../assets/images/Landing.png')}
-          resizeMode="contain"
-          style={styles.image}>
-          <Text style={styles.title}>Login </Text>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('../assets/images/Landing.png')}
+        resizeMode="contain"
+        style={styles.image}>
+        <Text style={styles.title}>Login</Text>
 
-          <TextInput
-            placeholder="Enter Email"
-            style={[styles.input, styles.allInput]}
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
+        <TextInput
+          placeholder="Enter Email"
+          style={[styles.input, styles.allInput]}
+          value={email}
+          onChangeText={text => setEmail(text)}
+        />
 
-          <TextInput
-            placeholder="Enter Password"
-            style={[styles.input, styles.allInput]}
-            value={password}
-            onChangeText={text => setPassword(text)}
-          />
+        <TextInput
+          placeholder="Enter Password"
+          style={[styles.input, styles.allInput]}
+          value={password}
+          onChangeText={text => setPassword(text)}
+        />
 
-          <View style={styles.btnContainer}>
-            <Button title={'Login'} onPress={buttonPressed} />
-          </View>
-          <TouchableOpacity onPress={handlePress}>
-            <Text style={styles.footerText}>Or SignUp</Text>
-          </TouchableOpacity>
-        </ImageBackground>
-      </View>
+        <View style={styles.btnContainer}>
+          <Button title={'Login'} onPress={buttonPressed} />
+        </View>
+        <TouchableOpacity onPress={handlePress}>
+          <Text style={styles.footerText}>Or SignUp</Text>
+        </TouchableOpacity>
+      </ImageBackground>
       <Loader visible={visible} />
-    </>
+    </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

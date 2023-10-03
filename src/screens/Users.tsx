@@ -1,32 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Color} from '../uikit/color';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-let id = '';
+
 const Users = () => {
-  const navigation = useNavigation();
-  const [users, setUsers] = useState([]);
-  const [id, setId] = useState('');
+  const navigation = useNavigation<any>();
+  const [users, setUsers] = useState<any>([]);
+  const [id, setId] = useState<any>('');
+  const [userName, setUserName] = useState<any>('');
 
   useEffect(() => {
     getUsers();
+    loadUserName();
   }, []);
+
+  const loadUserName = async () => {
+    try {
+      const name = await AsyncStorage.getItem('NAME');
+      if (name) {
+        setUserName(name);
+      }
+    } catch (error) {
+      console.error('Error loading user name:', error);
+    }
+  };
 
   const getUsers = async () => {
     try {
       const id = await AsyncStorage.getItem('USERID');
       const email = await AsyncStorage.getItem('EMAIL');
-
       if (!id || !email) {
         console.error('USERID or EMAIL not found in AsyncStorage');
         return;
@@ -47,57 +53,70 @@ const Users = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={['#4e54c8', '#8f94fb']} style={styles.container}>
+      <Text style={styles.headerText}>Welcome, {userName}</Text>
       <FlatList
         data={users}
-        renderItem={({item, index}) => (
+        renderItem={({item}) => (
           <TouchableOpacity
             style={styles.userItem}
             onPress={() => navigation.navigate('Chat', {data: item, id: id})}>
-            <MaterialCommunityIcons
-              name="account-circle"
-              color={Color.green}
-              size={60}
-            />
+            <View style={styles.avatarContainer}>
+              <MaterialCommunityIcons
+                name="account-circle"
+                color={Color.green}
+                size={60}
+              />
+            </View>
             <Text style={styles.nameText}>{item.name}</Text>
           </TouchableOpacity>
         )}
       />
-    </View>
+    </LinearGradient>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Color.backgroundColor,
     flex: 1,
-  },
-  header: {
-    width: '100%',
-    height: 70,
-    flexDirection: 'row',
-    elevation: 5,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    paddingTop: 20,
   },
   headerText: {
-    fontSize: 50,
-    color: Color.green,
+    fontSize: 28,
+    color: 'white',
     fontFamily: 'Poppins-Bold',
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   userItem: {
-    width: Dimensions.get('window').width - 50,
-    alignSelf: 'center',
-    marginTop: 20,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    padding: 10,
     flexDirection: 'row',
-    height: 60,
-    borderWidth: 0.5,
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 10,
-    backgroundColor: Color.white,
+    elevation: 3,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  avatarContainer: {
+    width: 70,
+    height: 70,
+    backgroundColor: 'white',
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 10,
   },
   nameText: {
     color: 'black',
-    fontSize: 40,
+    fontSize: 18,
     fontFamily: 'Poppins-SemiBold',
   },
 });
+
 export default Users;
